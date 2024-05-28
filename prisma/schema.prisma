@@ -18,6 +18,7 @@ model Account {
   government       Government?
   PermanentAddress PermanentAddress?
   PermanentInfo    PermanentInfo?
+  Porfolio         Porfolio[]
 }
 
 model Family {
@@ -118,6 +119,19 @@ model PermanentInfo {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        Account  @relation(fields: [userId], references: [userId])
+
+  @@index([userId])
+}
+
+model Porfolio {
+  portfolioId  Int      @id @default(autoincrement())
+  userId       Int
+  projectTitle String
+  projectDesc  String
+  projectGit   String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         Account  @relation(fields: [userId], references: [userId])
 
   @@index([userId])
 }

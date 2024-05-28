@@ -1,7 +1,7 @@
 // Import required modules
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import bcrypt, { hash } from "bcryptjs";
+import bcrypt from "bcryptjs";
 import { AccountType, SigninType } from "../types";
 
 const authRoute = express.Router();
@@ -61,10 +61,28 @@ authRoute.post("/signin", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    return res.status(200).json({ message: "Sign-in successful" });
+    req.session.user = {
+      id: existingUser.userId,
+      email: existingUser.email,
+      firstName: existingUser.firstName,
+      lastName: existingUser.lastName,
+    };
+
+    return res.status(200).json({ userId: existingUser.userId });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+authRoute.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Logout failed" });
+    }
+    res.clearCookie("connect.sid");
+    return res.status(200).json({ message: "Logged out successfully" });
+  });
+});
+
 export default authRoute;

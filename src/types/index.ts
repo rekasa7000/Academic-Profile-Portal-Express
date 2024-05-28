@@ -9,3 +9,10 @@ export type SigninType = {
   email: string;
   password: string;
 };
+
+export type PortfolioType = {
+  userId: number;
+  title: string;
+  description: string;
+  gitUrl: string;
+};
