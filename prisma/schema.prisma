@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  userId           Int               @id @default(autoincrement())
+  email            String            @unique
+  firstName        String
+  lastName         String
+  password         String
+  family           Family?
+  education        Education?
+  government       Government?
+  PermanentAddress PermanentAddress?
+  PermanentInfo    PermanentInfo?
+}
+
+model Family {
+  famId              Int      @id @default(autoincrement())
+  userId             Int      @unique
+  fatherFirstName    String
+  fatherLastName     String
+  fatherNumber       Int
+  fatherEduc         String
+  fatherDecease      Boolean  @default(false)
+  motherFirstName    String
+  motherLastName     String
+  motherNumber       Int
+  motherEduc         String
+  motherDecease      Boolean  @default(false)
+  emergencyFirstName String?
+  emergencyLastname  String?
+  emergencyRelation  String?
+  emergencyAdd       String?
+  emergencyNumber    Int?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  user               Account  @relation(fields: [userId], references: [userId])
+
+  @@index([userId])
+}
+
+model Education {
+  educId       Int      @id @default(autoincrement())
+  userId       Int      @unique
+  college      String
+  program      String
+  yearLevel    String
+  scholarType  String
+  elementary   String
+  elemGradYear String
+  highschool   String
+  hsGradYear   String
+  hsType       String
+  strand       String
+  lrn          Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         Account? @relation(fields: [userId], references: [userId])
+
+  @@index([userId])
+}
+
+model Government {
+  govId      Int      @id @default(autoincrement())
+  userId     Int      @unique
+  pppp       Boolean  @default(false)
+  lowincome  Boolean  @default(false)
+  salary     String?
+  soloparent Boolean  @default(false)
+  soloId     Int?
+  egspp      Boolean  @default(false)
+  ips        Boolean  @default(false)
+  ipGroup    String?
+  others     Boolean  @default(false)
+  othersDesc String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user Account @relation(fields: [userId], references: [userId])
+
+  @@index([userId])
+}
+
+model PermanentAddress {
+  addressId   Int      @id @default(autoincrement())
+  userId      Int      @unique
+  region      String?
+  province    String?
+  city        String?
+  barangay    String?
+  houseNumber String?
+  postalCode  Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        Account  @relation(fields: [userId], references: [userId])
+
+  @@index([userId])
+}
+
+model PermanentInfo {
+  infoId      Int      @id @default(autoincrement())
+  userId      Int      @unique
+  middleName  String?
+  suffix      String?
+  number      Int
+  birthDate   String
+  birthPlace  String
+  sex         String
+  citizen     String
+  civilStatus String
+  pwd         String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        Account  @relation(fields: [userId], references: [userId])
+
+  @@index([userId])
+}
