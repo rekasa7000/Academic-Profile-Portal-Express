@@ -3,6 +3,9 @@ export type AccountType = {
   firstName: string;
   lastName: string;
   password: string;
+  department: string;
+  program: string;
+  gender: string;
 };
 
 export type SigninType = {

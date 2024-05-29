@@ -3,6 +3,7 @@ import cors from "cors";
 import authRoute from "./routes/authRoute";
 import portfolioRoute from "./routes/portfolioRoute";
 import session from "express-session";
+import accountRoute from "./routes/accountRoute";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -40,6 +41,7 @@ app.use(
 
 app.use("/", authRoute);
 app.use("/", portfolioRoute);
+app.use("/", accountRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);

@@ -8,6 +8,7 @@ const cors_1 = __importDefault(require("cors"));
 const authRoute_1 = __importDefault(require("./routes/authRoute"));
 const portfolioRoute_1 = __importDefault(require("./routes/portfolioRoute"));
 const express_session_1 = __importDefault(require("express-session"));
+const accountRoute_1 = __importDefault(require("./routes/accountRoute"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 8000;
 app.use(express_1.default.json());
@@ -27,6 +28,7 @@ app.use((0, cors_1.default)({
 }));
 app.use("/", authRoute_1.default);
 app.use("/", portfolioRoute_1.default);
+app.use("/", accountRoute_1.default);
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
