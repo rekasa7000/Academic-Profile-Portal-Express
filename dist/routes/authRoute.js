@@ -23,7 +23,7 @@ authRoute.post("/signup", async (req, res) => {
             data: {
                 email: values.email,
                 firstName: values.firstName,
-                lastName: values.firstName,
+                lastName: values.lastName,
                 password: hashedPassword,
             },
         });
