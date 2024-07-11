@@ -62,4 +62,64 @@ portfolioRoute.get("/get/portfolio/:userId", async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 });
+portfolioRoute.put('/portfolio/:portfolioId', async (req, res) => {
+    try {
+        const values = req.body;
+        // Log request body for debugging
+        console.log("Request Body:", req.body);
+        const portfolioId = req.params.portfolioId;
+        const numberProjectId = parseInt(portfolioId);
+        if (isNaN(numberProjectId)) {
+            return res.status(400).json({ message: "Invalid portfolio ID" });
+        }
+        if (!values.title || !values.description || !values.gitUrl) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+        const projects = await prisma.porfolio.update({
+            where: { portfolioId: numberProjectId },
+            data: {
+                projectTitle: values.title,
+                projectDesc: values.description,
+                projectGit: values.gitUrl,
+            }
+        });
+        if (projects) {
+            return res.status(200).json({
+                message: `Project Updated Successfully.`,
+                data: projects
+            });
+        }
+        else {
+            throw new Error("Failed to update project"); // Throw error if project is false
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+portfolioRoute.delete('/portfolio/:portfolioId', async (req, res) => {
+    try {
+        const portfolioId = req.params.portfolioId;
+        const numberProjectId = parseInt(portfolioId);
+        if (isNaN(numberProjectId)) {
+            return res.status(400).json({ message: 'Invalid portfolio ID' });
+        }
+        const deletedProject = await prisma.porfolio.delete({
+            where: { portfolioId: numberProjectId },
+        });
+        if (deletedProject) {
+            return res.status(200).json({
+                message: 'Project deleted successfully.',
+                data: deletedProject,
+            });
+        }
+        else {
+            throw new Error('Failed to delete project');
+        }
+    }
+    catch (error) {
+        console.error('Error deleting project:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 exports.default = portfolioRoute;
